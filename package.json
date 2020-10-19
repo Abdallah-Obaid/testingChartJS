@@ -1,0 +1,32 @@
+{
+  "name": "testingchartjs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.5",
+    "pg": "^8.4.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.11.0",
+    "eslint-plugin-react": "^7.21.4"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "lint": "eslint '**/*.js'"  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Abdallah-Obaid/testingChartJS.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Abdallah-Obaid/testingChartJS/issues"
+  },
+  "homepage": "https://github.com/Abdallah-Obaid/testingChartJS#readme",
+  "keywords": []
+}
