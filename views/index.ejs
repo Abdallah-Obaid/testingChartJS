@@ -20,7 +20,34 @@
             <input type='hidden' id = 'names' value='<%=names%>' >
             <input type='hidden' id = 'attend' value='<%=attend%>'>
         <canvas id="myChart" ></canvas>
-        <div id="js-map" class="map"></div>
+        
+        <form class="form-inline">
+            <label for="epsg-query">Search projection:</label>
+            <input type="text" id="epsg-query" placeholder="4326, 27700, 3031, US National Atlas, Swiss, France, ..." class="form-control" size="50" />
+            <button id="epsg-search" class="btn">Search</button>
+            <span id="epsg-result"></span>
+            <div class="grid-container">
+                <div class="grid-1"><
+                    <div class="sidebar">
+                        <h2>Base Layers</h2>
+                        <input type="radio" name="radio" value="Standard-Layers" checked>Standard Layers<br>
+                        <input type="radio" name="radio" value="First-Layer" >First Layer<br>
+                        <input type="radio" name="radio" value="Sec-Layer" >Sec Layer<br>
+                    </div>
+                </div>
+                <div class="grid-2">
+                    <div id="js-map" class="map"></div>
+                </div>
+              <!-- <label for="render-edges">
+                Render reprojection edges
+                <input type="radio" id="render-edges" name='radio'>
+              </label>
+              <label for="show-graticule">
+                &nbsp;&nbsp;&nbsp;Show graticule
+                <input type="radio" id="show-graticule"  name='radio' />
+              </label> -->
+            </div>
+          </form>
         </div>
     </main>
     <script>

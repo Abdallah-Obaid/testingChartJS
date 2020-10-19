@@ -1,0 +1,26 @@
+.map {
+    height: 400px;
+    width: 100%;
+    margin-top: 30px;
+    border: 2px;
+    border-color: aqua;
+    border-radius: 5px 5px 5px 5px;
+  }
+*{
+    box-sizing: border-box;
+}  
+
+body{
+    margin: 0;
+    padding: 0px;
+}
+.grid-container{
+    display:grid;
+    grid-template-columns: 20vw 80vw;
+    grid-template-rows: 100vh;
+}
+.sidebar{
+    margin-left: 15px;
+    width: 335px;
+}
+  
