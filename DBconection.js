@@ -4,13 +4,13 @@
 // const Client =  require('pg').Client
 var akraftny;
 
-const {Client} =  require('pg')
-console.log(Client)
+const {Client} =  require('pg');
+// console.log(Client)
 const client =new Client({
-    user:"postgres",
-    password:"1234",
-    port: 5432,
-    database:"postgres"
-})
+  user:'postgres',
+  password:'1234',
+  port: 5432,
+  database:'postgres',
+});
 
 module.exports=client;
