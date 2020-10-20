@@ -48,79 +48,96 @@ var resultSpan = document.getElementById('epsg-result');
 var renderEdgesCheckbox = document.getElementById('render-edges');
 var showGraticuleCheckbox = document.getElementById('show-graticule');
 
-function setProjection(code, name, proj4def, bbox) {
-  if (code === null || name === null || proj4def === null || bbox === null) {
-    resultSpan.innerHTML = 'Nothing usable found, using EPSG:3857...';
-    map.setView(
-      new ol.View({
-        projection: 'EPSG:3857',
-        center: [0, 0],
-        zoom: 1,
-      }),
-    );
-    return;
-  }
-
-  resultSpan.innerHTML = '(' + code + ') ' + name;
-
-  var newProjCode = 'EPSG:' + code;
-  proj4.defs(newProjCode, proj4def);
-  console.log('here');
-  ol.proj.proj4.register(proj4);
-  var newProj = ol.proj.get(newProjCode);
-  var fromLonLat = ol.proj.getTransform('EPSG:4326', newProj);
-
-  var worldExtent = [bbox[1], bbox[2], bbox[3], bbox[0]];
-  newProj.setWorldExtent(worldExtent);
-
-  // approximate calculation of projection extent,
-  // checking if the world extent crosses the dateline
-  if (bbox[1] > bbox[3]) {
-    worldExtent = [bbox[1], bbox[2], bbox[3] + 360, bbox[0]];
-  }
-  var extent = ol.extent.applyTransform(worldExtent, fromLonLat, undefined, 8);
-  newProj.setExtent(extent);
-  var newView = new ol.View({
-    projection: newProj,
-  });
-  map.setView(newView);
-  newView.fit(extent);
-}
-
 function search(query) {
   resultSpan.innerHTML = 'Searching ...';
-  fetch('https://epsg.io/?format=json&q=' + query)
+  console.log(query)
+  fetch(`https://eu1.locationiq.com/v1/search.php?key=d4328e89827d71&q=${query}&format=json`)
     .then(function (response) {
+      console.log('sadsadasdsadasd',response)
       return response.json();
     })
     .then(function (json) {
-      var results = json['results'];
-      if (results && results.length > 0) {
-        for (var i = 0, ii = results.length; i < ii; i++) {
-          var result = results[i];
-          if (result) {
-            var code = result['code'];
-            var name = result['name'];
-            var proj4def = result['proj4'];
-            var bbox = result['bbox'];
-            if (
-              code &&
-              code.length > 0 &&
-              proj4def &&
-              proj4def.length > 0 &&
-              bbox &&
-              bbox.length == 4
-            ) {
-              setProjection(code, name, proj4def, bbox);
-              return;
-            }
-          }
-        }
-      }
-      setProjection(null, null, null, null);
-    });
-}
+      var results = json[0];
+      console.log(results)
+      var pointer = new ol.Feature({///////////////////////////////////
+        geometry: new ol.geom.Point(ol.proj.fromLonLat([results.lon, results.lat])),
+      });
+      console.log(pointer,'@@@@@@@')
+      pointer.setStyle(
+        new ol.style.Style({
+          image: new ol.style.Icon({
+            color: '#BADA55',
+            crossOrigin: 'anonymous',
+            // For Internet Explorer 11
+            imgSize: [20, 20],
+            src: 'data/square.svg',
+          }),
+        })
+      );
+      var vectorSource = new ol.source.Vector({
+        features: [pointer],
+      });
+      var vectorLayer = new ol.layer.Vector({
+        source: vectorSource
+      });
+      
+      var rasterLayer = new ol.layer.Tile({
+        source: new ol.source.OSM({
+          url:'https://{a-c}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
+        }),
+        visible:true,
+        title: 'First-Layer',
+      });
+      document.getElementById('map').remove();
+      var g = document.createElement('div');
+      g.setAttribute("id", "map");
+      g.setAttribute("class", "map");
+      document.getElementById('out-map').appendChild(g);
+      let map = new ol.Map({
+        layers: [rasterLayer, vectorLayer],
+        projection: 'EPSG:4326',
+        target: "map",
+        view: new ol.View({
+          center: ol.proj.fromLonLat([results.lon,results.lat]),
+          zoom: 17
+        })
+      });
+      // map.layer(vectorLayer)
+//       map.layers = [rasterLayer,vectorLayer]
+//       console.log(map)
+//       // map.setTarget('map')
+//       // map.setLayers( [rasterLayer, vectorLayer])
+//       map.setView(
+//   new ol.View({
+//     projection: 'EPSG:4326',
+//     center: [results.lon,results.lat],
+//     zoom: 16,
+//   }),
+// );  ////////////////////////////////////////
 
+const baseLayerElements=document.querySelectorAll('.sidebar > input[type=radio]');
+for(let baseLayerElement of baseLayerElements){
+    baseLayerElement.addEventListener('change',function(e){
+    e.preventDefault();
+    var allCheckbox = document.getElementById('all-checkbox')
+    let baseLayerElementValue = this.value; 
+    if('Sec-Layer' == baseLayerElementValue){
+      allCheckbox.style.display = "block";
+    }
+    else
+    {
+      allCheckbox.style.display = "none";
+    }
+    baseLayerGroup.getLayers().forEach(function(ele,i,arr)
+    {let baseLayerTitle = ele.get('title');
+      ele.setVisible(baseLayerTitle === baseLayerElementValue);
+    });
+  });
+}
+  resultSpan.innerHTML =results.display_name ;
+    });
+
+}
 /**
  * Handle click event.
  * @param {Event} event The event.
@@ -170,36 +187,20 @@ const stamenTerrain = new ol.layer.Tile({
   // Layer Switcher
   const baseLayerElements=document.querySelectorAll('.sidebar > input[type=radio]');
   for(let baseLayerElement of baseLayerElements){
-    baseLayerElement.addEventListener('change',function(){
-      let baseLayerElementValue = this.value;
+      baseLayerElement.addEventListener('change',function(e){
+      e.preventDefault();
+      var allCheckbox = document.getElementById('all-checkbox')
+      let baseLayerElementValue = this.value; 
+      if('Sec-Layer' == baseLayerElementValue){
+        allCheckbox.style.display = "block";
+      }
+      else
+      {
+        allCheckbox.style.display = "none";
+      }
       baseLayerGroup.getLayers().forEach(function(ele,i,arr)
       {let baseLayerTitle = ele.get('title');
         ele.setVisible(baseLayerTitle === baseLayerElementValue);
       });
     });
   }
-
-
-
-
-
-
-
-{/* <div id="map" class="map"></div>
-<form class="form-inline">
-  <label for="epsg-query">Search projection:</label>
-  <input type="text" id="epsg-query" placeholder="4326, 27700, 3031, US National Atlas, Swiss, France, ..." class="form-control" size="50" />
-  <button id="epsg-search" class="btn">Search</button>
-  <span id="epsg-result"></span>
-  <div>
-    <label for="render-edges">
-      Render reprojection edges
-      <input type="checkbox" id="render-edges">
-    </label>
-    <label for="show-graticule">
-      &nbsp;&nbsp;&nbsp;Show graticule
-      <input type="checkbox" id="show-graticule" />
-    </label>
-  </div>
-</form>
-</div> */}
