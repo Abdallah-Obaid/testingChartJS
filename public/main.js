@@ -120,7 +120,7 @@ function search(query) {
     });
 
 }
-/**
+/** 
  * Handle click event.
  * @param {Event} event The event.
  */
