@@ -22,8 +22,8 @@ var map = new ol.Map({
   target: 'map',
   view: new ol.View({
     projection: 'EPSG:3857',
-    center: [0, 0],
-    zoom: 1,
+    center: [6078500.965142061, 2809586.587491476],
+    zoom: 17,
   }),
 });
 map.on('click',function(e){console.log(e.coordinate);
@@ -231,16 +231,16 @@ function search(query) {
   console.log(query);
   fetch(`https://eu1.locationiq.com/v1/search.php?key=d4328e89827d71&q=${query}&format=json`)
     .then(function (response) {
-      console.log('sadsadasdsadasd',response);
+      // console.log('sadsadasdsadasd',response);
       return response.json();
     })
     .then(function (json) {
       var results = json[0];
-      console.log(results);
+      // console.log(results);
       var pointer = new ol.Feature({
         geometry: new ol.geom.Point(ol.proj.fromLonLat([results.lon, results.lat])),
       });
-      console.log(pointer,'@@@@@@@');
+      // console.log(pointer,'@@@@@@@');
       pointer.setStyle(
         new ol.style.Style({
           image: new ol.style.Icon({
