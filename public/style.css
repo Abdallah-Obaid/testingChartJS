@@ -16,6 +16,9 @@ div{
 
 h1{
     color: rgb(204, 204, 204);
+    text-align: center;
+    padding-top: 1%;
+    padding-bottom: 1%;
 }
 header{
     background-color: cornflowerblue;
