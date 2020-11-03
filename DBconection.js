@@ -5,7 +5,7 @@
 var akraftny;
 
 const {Client} =  require('pg');
-console.log("Client",Client)
+console.log('Client',Client);
 
 // const client =new Client({
 //   user:'postgres',
