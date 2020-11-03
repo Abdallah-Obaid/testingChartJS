@@ -21,12 +21,35 @@ body{
 }
 .sidebar{
     margin-left: 15px;
-    width: 335px;
+    width: 517px;
 }
   
 .options input[type="number"] {
     width:5em;
-  }
-  .options input[type="range"] {
+}
+
+.options input[type="range"] {
     vertical-align: middle;
-  }
+}
+  
+.ol-zoom {
+    top: 0.5em;
+    left: 0.5em;
+    width: 31px;
+}  
+
+.ol-control.ol-layerswitcher {
+  width: 2em;
+}
+
+#x {
+  display: none;
+}
+
+#y {
+  display: none;
+}
+
+.options input[type="number"] {
+  margin-bottom: 1%;
+}

@@ -24,6 +24,7 @@
   },
   "devDependencies": {
     "eslint": "^7.12.1",
+    "eslint-config-jquery": "^3.0.0",
     "eslint-config-openlayers": "^14.0.0"
   }
 }
