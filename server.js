@@ -25,10 +25,11 @@ server.get('/', (req,res)=>{
 
 client.connect()
   .then(()=>{
-    server.listen(PORT, () => console.log(`App is listening on ${PORT}`));})
-  .then(()=> console.log('Connected Successfully'))
-  .catch(e=>console.error('hi'));
-console.log('anything@@@@@@@@@@');
+    server.listen(PORT, () => console.log(`App is listening on ${PORT}`,Date()));
+  })
+  .catch(e => {console.log(e);});
+// .then(()=> console.log('Connected Successfully'))
+// .catch(e=>console.log('hi'));
 
 server.use('*',(req,res)=>{
   res.status(404).send('Go kill your self :*(');

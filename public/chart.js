@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 // var data = require('./index.js');
 
 // let users = ['Ahmad', 'Mohammad', 'Ali', 'Hasaanan', '3awad', 'Mahmoud']

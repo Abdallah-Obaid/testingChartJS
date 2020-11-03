@@ -2,12 +2,29 @@
   "name": "test",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "eslint **/*.js --fix",
     "start": "parcel index.html",
     "build": "parcel build --public-url . index.html"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "ol": "^6.4.3",
+    "ol-ext": "^3.1.16",
+    "openlayers-ext": "^3.1.5",
+    "parcel": "^1.12.4",
+    "pg": "^8.4.1",
+    "proj4": "^2.6.2",
+    "psql": "0.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.12.1",
+    "eslint-config-jquery": "^3.0.0",
+    "eslint-config-openlayers": "^14.0.0"
+  }
 }
