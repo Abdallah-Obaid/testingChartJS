@@ -8,7 +8,7 @@ const express = require('express');
 const cors = require('cors');
 // const pg = require('pg');
 // Application setup
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 4000;
 const server =  express();
 // server.use(cors());
 server.set('view engine','ejs');

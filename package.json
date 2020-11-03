@@ -5,8 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "eslint **/*.js --fix",
-    "start": "node server.js",
-    "build": "parcel build --public-url . index.html"
+    "start": "node server.js"
   },
   "author": "",
   "license": "ISC",
