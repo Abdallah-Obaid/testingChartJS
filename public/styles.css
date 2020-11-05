@@ -53,3 +53,7 @@ body{
 .options input[type="number"] {
   margin-bottom: 1%;
 }
+
+canvas {
+  transform: inherit !important;
+}
