@@ -314,6 +314,186 @@ showGraticuleCheckbox.onchange = function () {
 ////////////////////////////////////////////////////////////////////////////////
 
 
+// // for make polyline from x,y coordinate from geojson
+// var newArray=[];
+// var coordinates = [[-51.668701171875,-28.541100228636036],[-51.70166015625,-28.627925287618552],[-51.6357421875,-28.772474183943007],[-51.5203857421875,-28.777289039997598],[-51.35009765625,-28.73394733840369],[-51.207275390625,-28.676130433078256],[-51.5972900390625,-29.065772888415406],[-51.844482421875,-28.9072060763367],[-51.60072326660156,-29.068173545070522],[-51.79023742675781,-29.233683670282776],[-52.1466064453125,-29.120373989614624],[-51.79229736328125,-29.237278753059552],[-52.051849365234375,-29.45155650109173]];
+// console.log('coordinates1',coordinates);
+// // coordinates.unshift(getLocation());
+// console.log('coordinates2',coordinates);
+// coordinates.forEach((e)=>{newArray.push(e[1],e[0]);});
+// var polyline=ol.format.Polyline.encodeDeltas(
+//   newArray,
+//   2,1e6,
+// );
+
+// var route = /** @type {import("../src/ol/geom/LineString.js").default} */ (new ol.format.Polyline(
+//   {
+//     factor: 1e6,
+//   },
+// ).readGeometry(polyline, {
+//   dataProjection: 'EPSG:4326',
+//   featureProjection: 'EPSG:3857',
+// }));
+
+
+// function getLocation() {
+//   if (navigator.geolocation) {
+//     navigator.geolocation.getCurrentPosition(showPosition);
+//   }
+// }
+// function showPosition(position) {
+//   console.log([position.coords.latitude
+//     ,position.coords.longitude]);
+// }
+
+
+// var routeCoords = route.getCoordinates();
+// console.log('routeCoords', routeCoords);
+// var routeLength = routeCoords.length;
+// console.log('route', route);
+// var routeFeature = new ol.Feature({
+//   type: 'route',
+//   geometry: route,
+// });
+// var geoMarker = /** @type Feature<import("../src/ol/geom/Point").default> */ (new ol.Feature(
+//   {
+//     type: 'geoMarker',
+//     geometry: new ol.geom.Point(routeCoords[0]),
+//   },
+// ));
+// var startMarker = new ol.Feature({
+//   type: 'icon',
+//   geometry: new ol.geom.Point(routeCoords[0]),
+// });
+// var endMarker = new ol.Feature({
+//   type: 'icon',
+//   geometry: new ol.geom.Point(routeCoords[routeLength - 1]),
+// });
+
+// var styles = {
+//   route: new ol.style.Style({
+//     stroke: new ol.style.Stroke({
+//       width: 6,
+//       color: [237, 212, 0, 0.8],
+//     }),
+//   }),
+//   icon: new ol.style.Style({
+//     image: new ol.style.Icon({
+//       anchor: [0.5, 1],
+//       src: 'data/icon.png',
+//     }),
+//   }),
+//   geoMarker: new ol.style.Style({
+//     image: new ol.style.Circle({
+//       radius: 7,
+//       fill: new ol.style.Fill({ color: 'rgb(43, 149, 219)' }),
+//       stroke: new ol.style.Stroke({
+//         color: 'white',
+//         width: 2,
+//       }),
+//     }),
+//   }),
+// };
+
+// var animating = false;
+// var speed, now;
+// var speedInput = document.getElementById('speed');
+// var startButton = document.getElementById('start-animation');
+
+// var vectorLayer = new ol.layer.Vector({
+//   source: new ol.layer.Vector({
+//     features: [routeFeature, geoMarker, startMarker, endMarker],
+//   }),
+//   style: function (feature) {
+//     // hide geoMarker if animation is active
+//     if (animating && feature.get('type') === 'geoMarker') {
+//       return null;
+//     }
+//     return styles[feature.get('type')];
+//   },
+// });
+
+// var key = 'M9TDdi2dEDvoOpLaJYxQ';
+// var attributions =
+//   '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> ' +
+//   '<a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>';
+// map.addLayer(vectorLayer);
+
+
+// var moveFeature = function (event) {
+//   var vectorContext = ol.render.getVectorContext(event);
+//   var frameState = event.frameState;
+
+//   if (animating) {
+//     var elapsedTime = frameState.time - now;
+//     // here the trick to increase speed is to jump some indexes
+//     // on lineString coordinates
+//     var index = Math.round((speed * elapsedTime) / 1000);
+
+//     if (index >= routeLength) {
+//       stopAnimation(true);
+//       return;
+//     }
+
+//     var currentPoint = new ol.geom.Point(routeCoords[index]);
+//     var feature = new ol.Feature(currentPoint);
+//     vectorContext.drawFeature(feature, styles.geoMarker);
+//   }
+//   // tell OpenLayers to continue the postrender animation
+//   map.render();
+// };
+
+// function startAnimation() {
+//   if (animating) {
+//     stopAnimation(false);
+//   } else {
+//     animating = true;
+//     now = new Date().getTime();
+//     speed = speedInput.value;
+//     startButton.textContent = 'Cancel Animation';
+//     // hide geoMarker
+//     geoMarker.setStyle(null);
+//     // just in case you pan somewhere else
+//     map.getView().setCenter([6078500.965142061, 2809586.587491476]);
+//     vectorLayer.on('postrender', moveFeature);
+//     map.render();
+//   }
+// }
+
+// /**
+//  * @param {boolean} ended end of animation.
+//  */
+// function stopAnimation(ended) {
+//   animating = false;
+//   startButton.textContent = 'Start Animation';
+
+//   // if animation cancelled set the marker at the beginning
+//   var coord = ended ? routeCoords[routeLength - 1] : routeCoords[0];
+//   var geometry = geoMarker.getGeometry();
+//   geometry.setCoordinates(coord);
+//   //remove listener
+//   vectorLayer.un('postrender', moveFeature);
+// }
+
+// startButton.addEventListener('click', startAnimation, false);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

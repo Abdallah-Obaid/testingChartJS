@@ -68,6 +68,11 @@
                     <input id ="xmax" class="option" type="number" value="5766" step="10" />
                     <input id ="ymax" class="option" type="number" value ="5580" step="10" />
                   </div>
+                  <label for="speed">
+                    speed:&nbsp;
+                    <input id="speed" type="range" min="10" max="999" step="10" value="60">
+                  </label>
+                  <button id="start-animation">Start Animation</button>
                 <form class="form-inline">
                   <label for="epsg-query">Search projection:</label>
                   <input type="text" id="epsg-query" placeholder="4326, 27700, 3031, US National Atlas, Swiss, France, ..." class="form-control" size="50" />
@@ -164,7 +169,7 @@
     <script type="text/javascript" src="../../dist/ol-ext.js"></script>
     <!-- <script src="../libs/v6.4.3-dist/ol.js"></script>  -->
     <script src="https://unpkg.com/elm-pep"></script>
-    <script src="../chart.js"></script> 
+    <!-- <script src="../chart.js"></script>  -->
     <script src="../main.js"></script> 
 </body>
 </html>
