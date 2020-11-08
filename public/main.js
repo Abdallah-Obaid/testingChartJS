@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 'use strict';
 console.log('hi');
 
@@ -18,13 +19,16 @@ var map = new ol.Map({
     new ol.layer.Tile({
       source: new ol.source.OSM(),
     }),
-    graticule ],
+    graticule,
+  ],
   target: 'map',
   view: new ol.View({
     projection: 'EPSG:3857',
-    center: [0, 0],
-    // center: [6078500.965142061, 2809586.587491476],
-    zoom: 1,
+    // center: [-5639523.95, -3501274.52],
+    center: [3992579.250256516, 3760172.928780113],
+    zoom: 17,
+    // minZoom: 2,
+    // maxZoom: 19,
   }),
 });
 map.on('click',function(e){console.log(e.coordinate);
@@ -157,7 +161,7 @@ function resetSource () {
 
 // Show extent in the layerswitcher
 map.addControl(new ol.control.LayerSwitcher({ extent:true }));
-map.on('click',function(e){  geoimg.getSource().setCenter([e.coordinate[0],e.coordinate[1]]);});
+// map.on('click',function(e){  geoimg.getSource().setCenter([e.coordinate[0],e.coordinate[1]]);});
 ////////////////////////////////////////////////////////////////////////////////
 
 
@@ -318,58 +322,81 @@ showGraticuleCheckbox.onchange = function () {
 // for make polyline from x,y coordinate from geojson
 
 
+var a={'name':'a','cord':[35.86602285504341,31.97601465561543],'connect':[]};
+var b={'name':'b','cord':[35.86597356945276, 31.976024894181652],'connect':[]};
+var c={'name':'c','cord':[35.86598966270685,31.976086894363696],'connect':[]};
+var d={'name':'d','cord':[35.86595144122838,31.97609627970872],'connect':[]};
+var e={'name':'e','cord':[35.86594607681036,31.97607324295106],'connect':[]};
+var f={'name':'f','cord':[35.86591690778732,31.97614320641936],'connect':[]};
+var g={'name':'g','cord':[35.865960493683815,31.97611846324765],'connect':[]};
+var h={'name':'h','cord':[35.86596351116896,31.976134674291945],'connect':[]};
+var i={'name':'i','cord':[35.86591087281704,31.976123866929395],'connect':[]};
+var j={'name':'j','cord':[35.86590986698866,31.97610310541359],'connect':[]};
+var k={'name':'k','cord':[35.86590684950352,31.976082628297483],'connect':[]};
+a.connect = [b];
+b.connect = [a,c];
+c.connect = [b,g,d];
+d.connect = [c,e,i,j];
+e.connect = [d];
+f.connect = [i];
+g.connect = [c,h,i];
+h.connect = [g];
+i.connect = [d,g,f];
+j.connect = [k,d];
+k.connect = [j];
 
-// This long string is placed here due to jsFiddle limitations.
-// It is usually loaded with AJAX.
-var polyline = [
-  'hldhx@lnau`BCG_EaC??cFjAwDjF??uBlKMd@}@z@??aC^yk@z_@se@b[wFdE??wFfE}N',
-  'fIoGxB_I\\gG}@eHoCyTmPqGaBaHOoD\\??yVrGotA|N??o[N_STiwAtEmHGeHcAkiA}^',
-  'aMyBiHOkFNoI`CcVvM??gG^gF_@iJwC??eCcA]OoL}DwFyCaCgCcCwDcGwHsSoX??wI_E',
-  'kUFmq@hBiOqBgTwS??iYse@gYq\\cp@ce@{vA}s@csJqaE}{@iRaqE{lBeRoIwd@_T{]_',
-  'Ngn@{PmhEwaA{SeF_u@kQuyAw]wQeEgtAsZ}LiCarAkVwI}D??_}RcjEinPspDwSqCgs@',
-  'sPua@_OkXaMeT_Nwk@ob@gV}TiYs[uTwXoNmT{Uyb@wNg]{Nqa@oDgNeJu_@_G}YsFw]k',
-  'DuZyDmm@i_@uyIJe~@jCg|@nGiv@zUi_BfNqaAvIow@dEed@dCcf@r@qz@Egs@{Acu@mC',
-  'um@yIey@gGig@cK_m@aSku@qRil@we@{mAeTej@}Tkz@cLgr@aHko@qOmcEaJw~C{w@ka',
-  'i@qBchBq@kmBS{kDnBscBnFu_Dbc@_~QHeU`IuyDrC_}@bByp@fCyoA?qMbD}{AIkeAgB',
-  'k_A_A{UsDke@gFej@qH{o@qGgb@qH{`@mMgm@uQus@kL{_@yOmd@ymBgwE}x@ouBwtA__',
-  'DuhEgaKuWct@gp@cnBii@mlBa_@}|Asj@qrCg^eaC}L{dAaJ_aAiOyjByH{nAuYu`GsAw',
-  'Xyn@ywMyOyqD{_@cfIcDe}@y@aeBJmwA`CkiAbFkhBlTgdDdPyiB`W}xDnSa}DbJyhCrX',
-  'itAhT}x@bE}Z_@qW_Kwv@qKaaAiBgXvIm}A~JovAxCqW~WanB`XewBbK{_A`K}fBvAmi@',
-  'xBycBeCauBoF}}@qJioAww@gjHaPopA_NurAyJku@uGmi@cDs[eRaiBkQstAsQkcByNma',
-  'CsK_uBcJgbEw@gkB_@ypEqDoqSm@eZcDwjBoGw`BoMegBaU_`Ce_@_uBqb@ytBwkFqiT_',
-  'fAqfEwe@mfCka@_eC_UmlB}MmaBeWkkDeHwqAoX}~DcBsZmLcxBqOwqE_DkyAuJmrJ\\o',
-  '~CfIewG|YibQxBssB?es@qGciA}RorAoVajA_nAodD{[y`AgPqp@mKwr@ms@umEaW{dAm',
-  'b@umAw|@ojBwzDaaJsmBwbEgdCsrFqhAihDquAi`Fux@}_Dui@_eB_u@guCuyAuiHukA_',
-  'lKszAu|OmaA{wKm}@clHs_A_rEahCssKo\\sgBsSglAqk@yvDcS_wAyTwpBmPc|BwZknF',
-  'oFscB_GsaDiZmyMyLgtHgQonHqT{hKaPg}Dqq@m~Hym@c`EuiBudIabB{hF{pWifx@snA',
-  'w`GkFyVqf@y~BkoAi}Lel@wtc@}`@oaXi_C}pZsi@eqGsSuqJ|Lqeb@e]kgPcaAu}SkDw',
-  'zGhn@gjYh\\qlNZovJieBqja@ed@siO{[ol\\kCmjMe\\isHorCmec@uLebB}EqiBaCg}',
-  '@m@qwHrT_vFps@kkI`uAszIrpHuzYxx@e{Crw@kpDhN{wBtQarDy@knFgP_yCu\\wyCwy',
-  'A{kHo~@omEoYmoDaEcPiuAosDagD}rO{{AsyEihCayFilLaiUqm@_bAumFo}DgqA_uByi',
-  '@swC~AkzDlhA}xEvcBa}Cxk@ql@`rAo|@~bBq{@``Bye@djDww@z_C_cAtn@ye@nfC_eC',
-  '|gGahH~s@w}@``Fi~FpnAooC|u@wlEaEedRlYkrPvKerBfYs}Arg@m}AtrCkzElw@gjBb',
-  'h@woBhR{gCwGkgCc[wtCuOapAcFoh@uBy[yBgr@c@iq@o@wvEv@sp@`FajBfCaq@fIipA',
-  'dy@ewJlUc`ExGuaBdEmbBpBssArAuqBBg}@s@g{AkB{bBif@_bYmC}r@kDgm@sPq_BuJ_',
-  's@{X_{AsK_d@eM{d@wVgx@oWcu@??aDmOkNia@wFoSmDyMyCkPiBePwAob@XcQ|@oNdCo',
-  'SfFwXhEmOnLi\\lbAulB`X_d@|k@au@bc@oc@bqC}{BhwDgcD`l@ed@??bL{G|a@eTje@',
-  'oS~]cLr~Bgh@|b@}Jv}EieAlv@sPluD{z@nzA_]`|KchCtd@sPvb@wSb{@ko@f`RooQ~e',
-  '[upZbuIolI|gFafFzu@iq@nMmJ|OeJn^{Qjh@yQhc@uJ~j@iGdd@kAp~BkBxO{@|QsAfY',
-  'gEtYiGd]}Jpd@wRhVoNzNeK`j@ce@vgK}cJnSoSzQkVvUm^rSgc@`Uql@xIq\\vIgg@~k',
-  'Dyq[nIir@jNoq@xNwc@fYik@tk@su@neB}uBhqEesFjoGeyHtCoD|D}Ed|@ctAbIuOzqB',
-  '_}D~NgY`\\um@v[gm@v{Cw`G`w@o{AdjAwzBh{C}`Gpp@ypAxn@}mAfz@{bBbNia@??jI',
-  'ab@`CuOlC}YnAcV`@_^m@aeB}@yk@YuTuBg^uCkZiGk\\yGeY}Lu_@oOsZiTe[uWi[sl@',
-  'mo@soAauAsrBgzBqgAglAyd@ig@asAcyAklA}qAwHkGi{@s~@goAmsAyDeEirB_{B}IsJ',
-  'uEeFymAssAkdAmhAyTcVkFeEoKiH}l@kp@wg@sj@ku@ey@uh@kj@}EsFmG}Jk^_r@_f@m',
-  '~@ym@yjA??a@cFd@kBrCgDbAUnAcBhAyAdk@et@??kF}D??OL',
-].join('');
-// for make polyline from x,y coordinate from geojson
-// var newArray=[];
-var coordinates = [[-51.668701171875,-28.541100228636036],[-51.70166015625,-28.627925287618552],[-51.6357421875,-28.772474183943007],[-51.5203857421875,-28.777289039997598],[-51.35009765625,-28.73394733840369],[-51.207275390625,-28.676130433078256],[-51.5972900390625,-29.065772888415406],[-51.844482421875,-28.9072060763367],[-51.60072326660156,-29.068173545070522],[-51.79023742675781,-29.233683670282776],[-52.1466064453125,-29.120373989614624],[-51.79229736328125,-29.237278753059552],[-52.051849365234375,-29.45155650109173]];
-// coordinates.forEach((e)=>{newArray.push(e[1],e[0])})
-// var polyline=ol.format.Polyline.encodeDeltas(
-//   newArray,
-//   2,1e6
-// )
+// To find distance between nodes for edges
+function finLength(f1,f2){
+  var dif1 = f1.cord[0] - f2.cord[0];
+  var dif2 = f1.cord[1] - f2.cord[1];
+  var edge = Math.sqrt( dif1*dif1 + dif2*dif2 );
+  return edge;
+}
+
+function findAllPathes(first,sec){
+  if(first.name === sec.name)return 'you are in the point';
+  let totalWeight;
+  let finalPath = [];
+  let finalnames = [];
+  let nodes = function(node,weigth,path,names){
+    node.connect.forEach((ele) =>{
+      let disLin = finLength(node,ele);
+      if(ele.name == sec.name){
+        if(totalWeight == undefined || weigth + disLin < totalWeight){
+          finalPath = path.slice();
+          finalPath.push(ele.cord);
+          finalnames = names.slice();
+          finalnames.push(ele.name);
+          totalWeight =  weigth + disLin;
+        }
+      }
+      else if(first.name != ele.name && (totalWeight == undefined || weigth + disLin < totalWeight)){
+        let skip = false; 
+        names.forEach((name) =>{
+          if(name == ele.name )skip = true;
+        });
+        if(!skip)return nodes(ele, weigth + disLin, path.concat([ele.cord]),names.concat([ele.name]));
+      }
+    });
+  };
+  nodes(first,0,[],[]);
+  finalPath.unshift(first.cord);
+  finalnames.unshift(first.name);
+  return finalPath.length > 1 ? JSON.stringify({path:finalPath,weight:totalWeight,finalnames:finalnames}): 'no destence';
+}
+var path = JSON.parse(findAllPathes(a,f)).path; //Shows start and end point
+
+console.log(path,'pathsadasd');
+var newArray=[];
+// JSON.parse()
+var coordinates =path;
+// var coordinates =[[35.86591690778732,31.97614320641936],[35.86591087281704,31.976123866929395],[35.86595144122838,31.97609627970872],[35.86598966270685,31.976086894363696],[35.86597356945276,31.976024894181652],[35.86602285504341,31.97601465561543]];
+
+coordinates.forEach((e)=>{newArray.push(e[1],e[0]);});
+var polyline=ol.format.Polyline.encodeDeltas(
+  newArray,
+  2,1e6,
+);
 console.log(polyline);
 var route = /** @type {import("../src/ol/geom/LineString.js").default} */ (new ol.format.Polyline(
   {
@@ -404,6 +431,39 @@ var strGeoJson =
 //     featureProjection: "EPSG:3857"
 //   }
 // )).getGeometry();
+
+document.getElementById('form').addEventListener('change',()=>{
+  path = JSON.parse(findAllPathes(window[document.getElementById('from').value],window[document.getElementById('to').value])).path;
+  console.log(path,'path');
+  var newArray=[];
+  // JSON.parse()
+  var coordinates =path;
+  // var coordinates =[[35.86591690778732,31.97614320641936],[35.86591087281704,31.976123866929395],[35.86595144122838,31.97609627970872],[35.86598966270685,31.976086894363696],[35.86597356945276,31.976024894181652],[35.86602285504341,31.97601465561543]];
+
+  coordinates.forEach((e)=>{newArray.push(e[1],e[0]);});
+  var polyline=ol.format.Polyline.encodeDeltas(
+    newArray,
+    2,1e6,
+  );
+  var route = /** @type {import("../src/ol/geom/LineString.js").default} */ (new ol.format.Polyline(
+    {
+      factor: 1e6,
+    },
+  ).readGeometry(polyline, {
+    dataProjection: 'EPSG:4326',
+    featureProjection: 'EPSG:3857',
+  }));
+  routeFeature.setGeometry(route);
+  var routeCoords = route.getCoordinates();
+  console.log('routeCoords', routeCoords);
+  var routeLength = routeCoords.length;
+  console.log('route', route);
+
+
+  geoMarker.setGeometry(new ol.geom.Point(routeCoords[0]));
+  startMarker.setGeometry(new ol.geom.Point(routeCoords[0]));
+  endMarker.setGeometry(new ol.geom.Point(routeCoords[routeLength - 1]));
+});
 
 var routeCoords = route.getCoordinates();
 console.log('routeCoords', routeCoords);
@@ -458,7 +518,7 @@ var speed, now;
 var speedInput = document.getElementById('speed');
 var startButton = document.getElementById('start-animation');
 
-var vectorLayer = new ol.layer.Vector({
+var vectorLayer1 = new ol.layer.Vector({
   source: new ol.source.Vector({
     features: [routeFeature, geoMarker, startMarker, endMarker],
   }),
@@ -470,32 +530,11 @@ var vectorLayer = new ol.layer.Vector({
     return styles[feature.get('type')];
   },
 });
-
+map.addLayer(vectorLayer1);//layer activation
 var key = 'M9TDdi2dEDvoOpLaJYxQ';
 var attributions =
   '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> ' +
   '<a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>';
-
-var center = [-5639523.95, -3501274.52];
-var map = new ol.Map({
-  target: document.getElementById('map'),
-  view: new ol.View({
-    center: center,
-    zoom: 10,
-    minZoom: 2,
-    maxZoom: 19,
-  }),
-  layers: [
-    new ol.layer.Tile({
-      source: new ol.source.XYZ({
-        attributions: attributions,
-        url: 'https://api.maptiler.com/maps/hybrid/{z}/{x}/{y}.jpg?key=' + key,
-        tileSize: 512,
-      }),
-    }),
-    vectorLayer,
-  ],
-});
 
 var moveFeature = function (event) {
   var vectorContext = ol.render.getVectorContext(event);
@@ -531,8 +570,8 @@ function startAnimation() {
     // hide geoMarker
     geoMarker.setStyle(null);
     // just in case you pan somewhere else
-    map.getView().setCenter(center);
-    vectorLayer.on('postrender', moveFeature);
+    map.getView().setCenter([3992579.250256516, 3760172.928780113]);
+    vectorLayer1.on('postrender', moveFeature);
     map.render();
   }
 }
@@ -549,7 +588,7 @@ function stopAnimation(ended) {
   var geometry = geoMarker.getGeometry();
   geometry.setCoordinates(coord);
   //remove listener
-  vectorLayer.un('postrender', moveFeature);
+  vectorLayer1.un('postrender', moveFeature);
 }
 
 startButton.addEventListener('click', startAnimation, false);
