@@ -2,6 +2,9 @@
 'use strict';
 console.log('hi');
 
+
+
+
 var graticule = new ol.layer.Graticule({
   // the style to use for the lines, optional.
   strokeStyle: new ol.style.Stroke({
@@ -26,7 +29,7 @@ var map = new ol.Map({
     projection: 'EPSG:3857',
     // center: [-5639523.95, -3501274.52],
     center: [3992579.250256516, 3760172.928780113],
-    zoom: 17,
+    zoom: 19,
     // minZoom: 2,
     // maxZoom: 19,
   }),
@@ -36,9 +39,13 @@ map.on('click',function(e){console.log(e.coordinate);
 
 ///////////////////////////////Change map terrain///////////////////////////////
 
+
+
+
+
 const openStreetMapStandard = new ol.layer.Tile({
   source: new ol.source.OSM(),
-  visible:false,
+  visible:true,
   title: 'Standard-Layers',
 });
 
@@ -62,7 +69,7 @@ const sateliteTerrain = new ol.layer.Tile({
     url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
     maxZoom: 19,
   }),
-  visible:true,
+  visible:false,
   title: 'sateliteTerrain',
 });
 const bingSateliteTerrain = new ol.layer.Tile({
@@ -112,8 +119,8 @@ for(let baseLayerElement of baseLayerElements){
 /**
  * TO make GeoImage "Geo Refferance layer"
  */
-$('.option').on('change', resetSource);
 
+$('.option').on('change', resetSource);
 var x = Number($('#x').val());
 var y = Number($('#y').val());
 var sx = Number($('#w').val());
@@ -127,7 +134,7 @@ var geoimg = new ol.layer.GeoImage({
   name: 'Georef',
   opacity: .7,
   source: new ol.source.GeoImage({
-    url: './data/mapYas.png',
+    url: './data/PenguinIN.jpg',
     imageCenter: [x,y],
     imageScale: [sx,sy],
     imageCrop: [xmin,ymin,xmax,ymax],
@@ -139,6 +146,7 @@ var geoimg = new ol.layer.GeoImage({
 });
 map.addLayer(geoimg);
 
+
 function resetSource () {
   var x = Number($('#x').val());
   var y = Number($('#y').val());
@@ -148,15 +156,26 @@ function resetSource () {
   var ymin = Number($('#ymin').val());
   var xmax = Number($('#xmax').val());
   var ymax = Number($('#ymax').val());
-  // geoimg.getSource().setCenter([x,y]);
+  // var angleRotate = Number($('#rotate').val());
+  // let angle = -270 + angleRotate;
+  geoimg.getSource().setCenter([x,y]);
   geoimg.getSource().setRotation($('#rotate').val()*Math.PI/180);
   geoimg.getSource().setScale([sx,sy]);
   geoimg.getSource().setCrop([xmin,ymin,xmax,ymax]);
+
+  // pointer2.setGeometry(new ol.geom.Point(([3992566.263943126+.004*(Number(ele.Y1)*Math.cos(angle*Math.PI/180)+ Number(ele.X1)*Math.sin(angle*Math.PI/180) )  , 3760166.192932204+.004*(Number(ele.X1)*Math.cos(angle*Math.PI/180)- Number(ele.Y1)*Math.sin(angle*Math.PI/180) )])));
   var crop = geoimg.getSource().getCrop();
   $('#xmin').val(crop[0]);
   $('#ymin').val(crop[1]);
   $('#xmax').val(crop[2]);
-  $('#ymax').val(crop[3]);
+  $('#ymax').val(crop[3]); 
+  map.getLayers().forEach(layer => {
+    if (layer && layer.get('name') === 'vectorLayer2') {
+      map.removeLayer(layer);
+      
+    }
+  });
+  printPoints();
 }
 
 // Show extent in the layerswitcher
@@ -185,36 +204,36 @@ const circleStyle = new ol.style.Circle({
   stroke: strokeStyle,
 });
 
-const penguinInLayer = new ol.layer.VectorImage({
-  source: new ol.source.Vector({
-    url: './data/vector_data/map.geojson',
-    format: new ol.format.GeoJSON(),
-  }),
-  visible: true,
-  maxZoom:40,
-  minZoom:18,
-  // projection: 'EPSG:3857',
-  title:'penguinInLayer',
-  style: new ol.style.Style({
-    fill:fillStyle,
-    stroke:strokeStyle,
-    image:circleStyle,
-  }),
-});
-map.addLayer(penguinInLayer);
+// const penguinInLayer = new ol.layer.VectorImage({
+//   source: new ol.source.Vector({
+//     url: './data/vector_data/map.geojson',
+//     format: new ol.format.GeoJSON(),
+//   }),
+//   visible: true,
+//   maxZoom:40,
+//   minZoom:18,
+//   // projection: 'EPSG:3857',
+//   title:'penguinInLayer',
+//   style: new ol.style.Style({
+//     fill:fillStyle,
+//     stroke:strokeStyle,
+//     image:circleStyle,
+//   }),
+// });
+// map.addLayer(penguinInLayer);
 
-const penguinInLayerDetails = new ol.layer.VectorImage({
-  source: new ol.source.Vector({
-    url: './data/vector_data/map1.geojson',
-    format: new ol.format.GeoJSON(),
-  }),
-  visible: true,
-  maxZoom:40,
-  minZoom:21,
-  // projection: 'EPSG:3857',
-  title:'penguinInLayerDetails',
-});
-map.addLayer(penguinInLayerDetails);
+// const penguinInLayerDetails = new ol.layer.VectorImage({
+//   source: new ol.source.Vector({
+//     url: './data/vector_data/map1.geojson',
+//     format: new ol.format.GeoJSON(),
+//   }),
+//   visible: true,
+//   maxZoom:40,
+//   minZoom:21,
+//   // projection: 'EPSG:3857',
+//   title:'penguinInLayerDetails',
+// });
+// map.addLayer(penguinInLayerDetails);
 ////////////////////////////////////////////////////////////////////////////////
 
 
@@ -384,7 +403,7 @@ function findAllPathes(first,sec){
   finalnames.unshift(first.name);
   return finalPath.length > 1 ? JSON.stringify({path:finalPath,weight:totalWeight,finalnames:finalnames}): 'no destence';
 }
-var path = JSON.parse(findAllPathes(a,f)).path; //Shows start and end point
+var path = JSON.parse(findAllPathes(window[document.getElementById('from').value],window[document.getElementById('to').value])).path; //Shows start and end point
 
 console.log(path,'pathsadasd');
 var newArray=[];
@@ -622,3 +641,93 @@ startButton.addEventListener('click', startAnimation, false);
 //   }),
 //   className:'mapy',
 // });
+
+
+let coordinateForPath={};
+
+function printPoints(){
+  superagent
+    .post('/edges')
+    .send({'FloorIDs':'2','LastUpdateDate':'2018-02-13'}) // sends a JSON post body
+    .set('X-API-Key', 'foobar')
+    .set('accept', 'json')
+    .end((err, res) => {
+      var angleRotate = Number($('#rotate').val());
+      let angle = (-270 + angleRotate)*Math.PI/180;
+      let scale =0.00441176470588235;
+      let xCoord=3992566.263943126;
+      let yCoord=3760166.192932204;
+      console.log(res.body.GetFloorsEdgesResult, 'res 2nd');
+
+      res.body.GetFloorsEdgesResult.forEach((ele)=>{
+        if(ele.P1FloorID == 2){
+          console.log(Number(ele.X1),Number(ele.Y1), 'res 3nd');
+          coordinateForPath[ele.ID]=[ele.X1,ele.Y1];
+          var pointer2 = new ol.Feature({
+            geometry: new ol.geom.Point(([xCoord+scale*(Number(ele.Y1)*Math.cos(angle)+ Number(ele.X1)*Math.sin(angle) )  , yCoord+scale*(Number(ele.X1)*Math.cos(angle)- Number(ele.Y1)*Math.sin(angle) )])),
+          });
+          // console.log(pointer,'@@@@@@@');
+          pointer2.setStyle(
+            new ol.style.Style({
+              image: new ol.style.Icon({
+                color: '#2b95db',
+                crossOrigin: 'anonymous',
+                // For Internet Explorer 11
+                imgSize: [20, 20],
+                src: 'data/dot.svg',
+              }),
+            }),
+          );
+          var vectorSource2 = new ol.source.Vector({
+            features: [pointer2],
+
+          });
+          var vectorLayer2 = new ol.layer.Vector({
+            source: vectorSource2,
+            name:'vectorLayer2',
+            maxZoom:40,
+            minZoom:21,
+          });
+          console.log(map.getLayers(vectorLayer2),'layer');
+          map.addLayer(vectorLayer2);//layer activation 
+         
+        }
+      });   
+      console.log(coordinateForPath,'coordinateForPath');
+      findPath(coordinateForPath);
+    });
+}
+printPoints();
+let finalPathArray=[];
+function findPath(coordinateForPath){
+  var  path= [document.getElementById('from').value,document.getElementById('to').value]; //Shows start and end point
+  console.log('paaaaaaaaaaaaaaaaaaaaaaaath',path);
+  superagent
+    .post('/shortestpath')
+    .send({
+      'x1':coordinateForPath[path[0]][0],
+      'y1':coordinateForPath[path[0]][1],
+      'sFloorID':'2',
+      'EdgeID' : '6',
+      'destPoIId':path[1],
+      'UserID':'Majd',
+      'HandicapUser':'false',
+    }) // sends a JSON post body
+    .set('X-API-Key', 'foobar')
+    .set('accept', 'json')
+    .end((err, res) => {
+      console.log(res.body,'res 1st');   
+      res.body.getPathToPoIResult.forEach((ele)=>{
+        finalPathArray.push(coordinateForPath[ele]);
+        console.log('finalPathArray',finalPathArray);
+        
+      });
+      finalPathArray =finalPathArray.filter(function( element ) {
+        return element !== undefined;
+      });
+      console.log('finalPathArray',finalPathArray);
+    });}
+
+
+
+

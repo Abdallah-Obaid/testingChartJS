@@ -42,13 +42,13 @@ body{
   width: 2em;
 }
 
-#x {
+/* #x {
   display: none;
 }
 
 #y {
   display: none;
-}
+} */
 
 .options input[type="number"] {
   margin-bottom: 1%;
