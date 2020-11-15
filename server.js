@@ -39,6 +39,19 @@ server.post('/edges',function(request,response){
       response.send(result.body);
     });
 });
+
+server.post('/gitallpoi',function(request,response){
+  superagent
+    .post('http://82.212.107.181:8090/PenNav_API/DataAPI.svc/GetPoIByFloor')
+    .send(request.body) // sends a JSON post body
+    .set('accept', 'json')
+    .end(function (err, result) {
+      console.log(result.body,'res.body');
+      response.send(result.body);
+
+    });
+});
+
 console.log('@@@@@@@@');
 
 server.get('/', (req,res)=>{
