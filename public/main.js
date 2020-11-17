@@ -3,7 +3,10 @@
 console.log('hi');
 
 
+var gate={
+  1: 1,
 
+};
 
 var graticule = new ol.layer.Graticule({
   // the style to use for the lines, optional.
@@ -34,7 +37,17 @@ var map = new ol.Map({
     // maxZoom: 19,
   }),
 });
-map.on('click',function(e){console.log(e.coordinate);
+// Change from mercator to lon/lat
+var meters2degress = function(x,y) {
+  var lon = x *  180 / 20037508.34 ;
+  //thanks magichim @ github for the correction
+  var lat = Math.atan(Math.exp(y * Math.PI / 20037508.34)) * 360 / Math.PI - 90; 
+  return [lon, lat];
+};
+
+map.on('click',function(e){
+  console.log(e.coordinate,'Mercator');
+  console.log(meters2degress(e.coordinate[0],e.coordinate[1]),'LON|LAT');
   map.forEachFeatureAtPixel(e.pixel,function(feature,layer){
     console.log('feature',feature);
     if(feature.values_.name.split(' ')[0] != 'poi'){
@@ -421,32 +434,38 @@ function AddPoint(X,Y,ID){
 /**
  * Find shortest path and draw it
  */
-function findPath(path){
+async function  findPath(path,yes){
   let finalPathArray=[];
-  // console.log('paaaaaaaaaaaaaaaaaaaaaaaath',coordinateForPath[path[0]]);
-  superagent
-    .post('/shortestpath')
-    .send({
-      'x1':coordinateForPath[path[0]][0][0],
+  var newArray=[];
+  var reutunedArray=[];
+  console.log('paaaaaaaaaaaaaaaaaaaaaaaath',coordinateForPath[path[0]]);
+  await fetch('/shortestpath', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({      'x1':coordinateForPath[path[0]][0][0],
       'y1':coordinateForPath[path[0]][0][1],
       'sFloorID':'2',
       'EdgeID' : path[0],
       'destPoIId':path[1],
       'UserID':'Majd',
-      'HandicapUser':'false',
-    }) // sends a JSON post body
-    .set('X-API-Key', 'foobar')
-    .set('accept', 'json')
-    .end((err, res) => {
-      // finalPathArray = finalPathArray.concat(coordinateForPath[path[0]]);
-      // console.log(res.body,'res 1st');   
+      'HandicapUser':'false'}),
+  })
+    .then((response) => response.json())
+  //Then with the data from the response in JSON...
+    .then((res) => {
+      console.log('Success:', res);
+      finalPathArray = finalPathArray.concat(coordinateForPath[path[0]]);
+      console.log(res,'res 1st');   
       map.getLayers().forEach(layer => {
         if (layer && layer.get('name') === 'vectorLayer3') {
           map.removeLayer(layer);
           
         }});
-      let val1 =Math.abs(coordinateForPath[res.body.getPathToPoIResult[1]][0][0] - coordinateForPath[path[0]][0][0]) + Math.abs(coordinateForPath[res.body.getPathToPoIResult[1]][0][1] - coordinateForPath[path[0]][0][1]);
-      let val2 =Math.abs(coordinateForPath[res.body.getPathToPoIResult[1]][0][0] - coordinateForPath[path[0]][1][0]) +Math.abs(coordinateForPath[res.body.getPathToPoIResult[1]][0][1] - coordinateForPath[path[0]][1][1]);
+      console.log(res,'resresresresresres');
+      let val1 =Math.abs(coordinateForPath[res.getPathToPoIResult[1]][0][0] - coordinateForPath[path[0]][0][0]) + Math.abs(coordinateForPath[res.getPathToPoIResult[1]][0][1] - coordinateForPath[path[0]][0][1]);
+      let val2 =Math.abs(coordinateForPath[res.getPathToPoIResult[1]][0][0] - coordinateForPath[path[0]][1][0]) +Math.abs(coordinateForPath[res.getPathToPoIResult[1]][0][1] - coordinateForPath[path[0]][1][1]);
       if(val1 < val2){
         finalPathArray.push(coordinateForPath[path[0]][1]);
         finalPathArray.push(coordinateForPath[path[0]][0]);
@@ -454,7 +473,7 @@ function findPath(path){
         finalPathArray.push(coordinateForPath[path[0]][0]);
         finalPathArray.push(coordinateForPath[path[0]][1]);
       }
-      res.body.getPathToPoIResult.forEach((ele,i)=>{
+      res.getPathToPoIResult.forEach((ele,i)=>{
         let val = finalPathArray[finalPathArray.length - 1][0];
         if(i != 0 && coordinateForPath[ele] != undefined){
           if(Math.abs(val- coordinateForPath[ele][0][0]) > Math.abs(val - coordinateForPath[ele][1][0])){
@@ -479,9 +498,8 @@ function findPath(path){
       });
       // console.log('finalPathArrayhereeeeee',arr);
       finalPathArray = arr;
-      var newArray=[];
       var coordinates =finalPathArray;
-      // console.log(coordinates,'coordinatescoordinates');
+      console.log(coordinates,'coordinatescoordinates');
       var meters2degress = function(x,y) {
         var lon = x *  180 / 20037508.34 ;
         //thanks magichim @ github for the correction
@@ -491,90 +509,94 @@ function findPath(path){
       coordinates.forEach((e,i)=>{
         let arrnew = meters2degress(e[0],e[1]);
         newArray.push(arrnew[1],arrnew[0]);
+        reutunedArray.push(arrnew[1],arrnew[0]);
       });
-      // console.log(newArray,'newArraynewArrayhere');
-      var polyline=ol.format.Polyline.encodeDeltas(
-        newArray,
-        2,1e6,
-      );
-      console.log(newArray,'newArraynewArray');
-      // console.log(polyline);
-      var route = /** @type {import("../src/ol/geom/LineString.js").default} */ (new ol.format.Polyline(
-        {
-          factor: 1e6,
-        },
-      ).readGeometry(polyline, {
-        dataProjection: 'EPSG:4326',
-        featureProjection: 'EPSG:3857',
-      }));
+      console.log(newArray,'newArraynewArrayhere');
+      // reutunedArray=newArray;
+      if(yes){
+        var polyline=ol.format.Polyline.encodeDeltas(
+          newArray,
+          2,1e6,
+        );
+        // console.log(newArray,'newArraynewArray');
+        // console.log(polyline);
+        var route = /** @type {import("../src/ol/geom/LineString.js").default} */ (new ol.format.Polyline(
+          {
+            factor: 1e6,
+          },
+        ).readGeometry(polyline, {
+          dataProjection: 'EPSG:4326',
+          featureProjection: 'EPSG:3857',
+        }));
 
-      //0: -5751733.504402943
-      //1: -3317367.02757665
+        //0: -5751733.504402943
+        //1: -3317367.02757665
 
-      // coordinates.unshift(getLocation());
-      // console.log('coordinates',coordinates);
+        // coordinates.unshift(getLocation());
+        // console.log('coordinates',coordinates);
       
-      var routeCoords = route.getCoordinates();
-      // console.log('routeCoords', routeCoords);
-      var routeLength = routeCoords.length;
-      // console.log('route', route);
-      var routeFeature = new ol.Feature({
-        type: 'route',
-        geometry: route,
-      });
-      var geoMarker = /** @type Feature<import("../src/ol/geom/Point").default> */ (new ol.Feature(
-        {
-          type: 'geoMarker',
+        var routeCoords = route.getCoordinates();
+        // console.log('routeCoords', routeCoords);
+        var routeLength = routeCoords.length;
+        // console.log('route', route);
+        var routeFeature = new ol.Feature({
+          type: 'route',
+          geometry: route,
+        });
+        var geoMarker = /** @type Feature<import("../src/ol/geom/Point").default> */ (new ol.Feature(
+          {
+            type: 'geoMarker',
+            geometry: new ol.geom.Point(routeCoords[0]),
+          },
+        ));
+        var startMarker = new ol.Feature({
+          type: 'icon',
           geometry: new ol.geom.Point(routeCoords[0]),
-        },
-      ));
-      var startMarker = new ol.Feature({
-        type: 'icon',
-        geometry: new ol.geom.Point(routeCoords[0]),
-      });
-      var endMarker = new ol.Feature({
-        type: 'icon',
-        geometry: new ol.geom.Point(routeCoords[routeLength - 1]),
-      });
+        });
+        var endMarker = new ol.Feature({
+          type: 'icon',
+          geometry: new ol.geom.Point(routeCoords[routeLength - 1]),
+        });
 
-      var styles = {
-        route: new ol.style.Style({
-          stroke: new ol.style.Stroke({
-            width: 6,
-            color: [237, 212, 0, 0.8],
-          }),
-        }),
-        icon: new ol.style.Style({
-          image: new ol.style.Icon({
-            anchor: [0.5, 1],
-            src: 'data/icon.png',
-          }),
-        }),
-        geoMarker: new ol.style.Style({
-          image: new ol.style.Circle({
-            radius: 7,
-            fill: new ol.style.Fill({ color: 'rgb(43, 149, 219)' }),
+        var styles = {
+          route: new ol.style.Style({
             stroke: new ol.style.Stroke({
-              color: 'white',
-              width: 2,
+              width: 6,
+              color: [237, 212, 0, 0.8],
             }),
           }),
-        }),
-      };
+          icon: new ol.style.Style({
+            image: new ol.style.Icon({
+              anchor: [0.5, 1],
+              src: 'data/icon.png',
+            }),
+          }),
+          geoMarker: new ol.style.Style({
+            image: new ol.style.Circle({
+              radius: 7,
+              fill: new ol.style.Fill({ color: 'rgb(43, 149, 219)' }),
+              stroke: new ol.style.Stroke({
+                color: 'white',
+                width: 2,
+              }),
+            }),
+          }),
+        };
 
 
-      var vectorLayer3 = new ol.layer.Vector({
-        name:'vectorLayer3',
-        source: new ol.source.Vector({
-          features: [routeFeature, geoMarker, startMarker, endMarker],
-        }),
-        style: function (feature) {
-          return styles[feature.get('type')];
-        },
-      });
-      map.addLayer(vectorLayer3);//layer activation
+        var vectorLayer3 = new ol.layer.Vector({
+          name:'vectorLayer3',
+          source: new ol.source.Vector({
+            features: [routeFeature, geoMarker, startMarker, endMarker],
+          }),
+          style: function (feature) {
+            return styles[feature.get('type')];
+          },
+        });
+        map.addLayer(vectorLayer3);//layer activation
+      }
     });
-  return finalPathArray;
+  return reutunedArray;
 }
 
 
@@ -721,7 +743,7 @@ $('#submit').on('click', getpath);
 function getpath(){
   var edgeID = Number($('#from').val());
   var distpoi = Number($('#to').val());
-  findPath([edgeID,distpoi]);
+  findPath([edgeID,distpoi],true);
 }
 
 
@@ -735,6 +757,8 @@ function getpath(){
  */
 var outnavInput = document.getElementById('outnav-input'); //for search
 var secPointInput = document.getElementById('secPoint-input'); //for search
+var poiInput = document.getElementById('poi-input').value; //for search
+var edgeID = Number($('#from').val());
 var outnavButton = document.getElementById('outnav-button');//for search
 var outnavResult = document.getElementById('outnav-result');//for search  
 
@@ -837,7 +861,7 @@ async function Outdoor(query,query2) {
             const results1 = json1[0];
             return `http://router.project-osrm.org/route/v1/driving/${position.coords.longitude},${position.coords.latitude};${results1.lon},${results1.lat};${results.lon},${results.lat}?alternatives=true&overview=full&annotations=nodes&geometries=geojson`;
           }else {
-            console.log('hellllllllllllllllllllllllllllllllllllllllloooooooooooooooooooooooooooooooooooooooooooooooo')
+            console.log('hellllllllllllllllllllllllllllllllllllllllloooooooooooooooooooooooooooooooooooooooooooooooo');
             return `http://router.project-osrm.org/route/v1/driving/${position.coords.longitude},${position.coords.latitude};${results.lon},${results.lat}?alternatives=true&overview=full&annotations=nodes&geometries=geojson`;
           }
         }
@@ -848,7 +872,7 @@ async function Outdoor(query,query2) {
             console.log('sadsadasdsadasd',response);
             return response.json();
           })
-          .then(function (json) {
+          .then(async function (json) {
             var finalCoord=[];
             console.log('jsonjsonjson',json);
             console.log(json.routes[0].geometry.coordinates);
@@ -857,8 +881,9 @@ async function Outdoor(query,query2) {
             results.forEach((ele)=>{
               finalCoord.push(ele[1],ele[0]);
             });
-            console.log('resultsresults',finalCoord);
-
+            var indoorPath =await findPath([edgeID,poiInput]);
+            console.log('resultsresults',indoorPath,finalCoord);
+            finalCoord = finalCoord.concat(indoorPath);
             var polyline=ol.format.Polyline.encodeDeltas(
               finalCoord,
               2,1e6,
@@ -959,9 +984,17 @@ outnavButton.onclick = function (event) {
   event.preventDefault();
 };
 
+////////////////////////////////////////////////////////////////////////////////
 
 
- 
+////////////////////////////In-Out door navigation//////////////////////////////
+/**
+ * In-Out door navigation
+ */
+
+
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Add functionality to vectors (Pop up text):
