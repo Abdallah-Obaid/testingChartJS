@@ -36,6 +36,7 @@ var map = new ol.Map({
 });
 map.on('click',function(e){console.log(e.coordinate);
   map.forEachFeatureAtPixel(e.pixel,function(feature,layer){
+    console.log('feature',feature);
     if(feature.values_.name.split(' ')[0] != 'poi'){
       $('#from').val(feature.values_.name.split(' ')[1]); 
     }else{
@@ -102,7 +103,7 @@ const baseLayerElements=document.querySelectorAll('.sidebar > input[type=radio]'
 for(let baseLayerElement of baseLayerElements){
   baseLayerElement.addEventListener('change',function(e){
     e.preventDefault();
-    console.log('here1');
+    // console.log('here1');
     var allCheckbox = document.getElementById('all-checkbox');
     let baseLayerElementValue = this.value; 
     if('Sec-Layer' == baseLayerElementValue){
@@ -155,7 +156,7 @@ map.addLayer(geoimg);
 
 
 function resetSource () {
-  console.log('here2');
+  // console.log('here2');
   var x = Number($('#x').val());
   var y = Number($('#y').val());
   var sx = Number($('#w').val());
@@ -261,7 +262,7 @@ var showGraticuleCheckbox = document.getElementById('show-graticule');// for gri
  */
 function search(query) {
   resultSpan.innerHTML = 'Searching ...';
-  console.log(query);
+  // console.log(query);
   fetch(`https://eu1.locationiq.com/v1/search.php?key=d4328e89827d71&q=${query}&format=json`)
     .then(function (response) {
       // console.log('sadsadasdsadasd',response);
@@ -323,7 +324,7 @@ searchButton.onclick = function (event) {
  * Handle checkbox change event.
  */
 renderEdgesCheckbox.onchange = function () {
-  console.log('here3');
+  // console.log('here3');
   map.getLayers().forEach(function (layer) {
     if (layer instanceof ol.layer.Tile) {
       var source = layer.getSource();
@@ -343,7 +344,7 @@ renderEdgesCheckbox.onchange = function () {
  * Handle checkbox change event.
  */
 showGraticuleCheckbox.onchange = function () {
-  console.log('here4');
+  // console.log('here4');
   graticule.setVisible(showGraticuleCheckbox.checked);
 };
 ////////////////////////////////////////////////////////////////////////////////
@@ -378,7 +379,7 @@ let checkExistentArray=[];
 function AddPoint(X,Y,ID){
   if(!checkExistentArray.includes(`${X}`+ `${Y}`)){
     checkExistentArray.push(`${X}`+`${Y}`);
-    console.log('checkExistentArraycheckExistentArray');
+    // console.log('checkExistentArraycheckExistentArray');
     var angleRotate = Number($('#rotate').val());
     let angle = (-270 + angleRotate)*Math.PI/180;
     let scale =0.00441176470588235;
@@ -416,13 +417,13 @@ function AddPoint(X,Y,ID){
 ////////////////////////////////////////////////////////////////////////////////
 
 
-/////////////////////Find shortest path and draw it//////////////////////
+//////////////////////////Find shortest path and draw it///////////////////////
 /**
  * Find shortest path and draw it
  */
 function findPath(path){
   let finalPathArray=[];
-  console.log('paaaaaaaaaaaaaaaaaaaaaaaath',coordinateForPath[path[0]]);
+  // console.log('paaaaaaaaaaaaaaaaaaaaaaaath',coordinateForPath[path[0]]);
   superagent
     .post('/shortestpath')
     .send({
@@ -438,7 +439,7 @@ function findPath(path){
     .set('accept', 'json')
     .end((err, res) => {
       // finalPathArray = finalPathArray.concat(coordinateForPath[path[0]]);
-      console.log(res.body,'res 1st');   
+      // console.log(res.body,'res 1st');   
       map.getLayers().forEach(layer => {
         if (layer && layer.get('name') === 'vectorLayer3') {
           map.removeLayer(layer);
@@ -466,7 +467,7 @@ function findPath(path){
         }
         // console.log('finalPathArray',finalPathArray);
       });
-      console.log('finalPathArray',finalPathArray);
+      // console.log('finalPathArray',finalPathArray);
       var arr = [];
       var angleRotate = Number($('#rotate').val());
       let angle = (-270 + angleRotate)*Math.PI/180;
@@ -476,11 +477,11 @@ function findPath(path){
       finalPathArray.forEach((ele,i)=>{
         arr.push([xCoord+scale*(Number(ele[1])*Math.cos(angle)+ Number(ele[0])*Math.sin(angle) )  , yCoord+scale*(Number(ele[0])*Math.cos(angle)- Number(ele[1])*Math.sin(angle) )]);
       });
-      console.log('finalPathArrayhereeeeee',arr);
+      // console.log('finalPathArrayhereeeeee',arr);
       finalPathArray = arr;
       var newArray=[];
       var coordinates =finalPathArray;
-      console.log(coordinates,'coordinatescoordinates');
+      // console.log(coordinates,'coordinatescoordinates');
       var meters2degress = function(x,y) {
         var lon = x *  180 / 20037508.34 ;
         //thanks magichim @ github for the correction
@@ -491,13 +492,13 @@ function findPath(path){
         let arrnew = meters2degress(e[0],e[1]);
         newArray.push(arrnew[1],arrnew[0]);
       });
-      console.log(newArray,'newArraynewArrayhere');
+      // console.log(newArray,'newArraynewArrayhere');
       var polyline=ol.format.Polyline.encodeDeltas(
         newArray,
         2,1e6,
       );
       console.log(newArray,'newArraynewArray');
-      console.log(polyline);
+      // console.log(polyline);
       var route = /** @type {import("../src/ol/geom/LineString.js").default} */ (new ol.format.Polyline(
         {
           factor: 1e6,
@@ -510,13 +511,13 @@ function findPath(path){
       //0: -5751733.504402943
       //1: -3317367.02757665
 
-      coordinates.unshift(getLocation());
-      console.log('coordinates',coordinates);
+      // coordinates.unshift(getLocation());
+      // console.log('coordinates',coordinates);
       
       var routeCoords = route.getCoordinates();
-      console.log('routeCoords', routeCoords);
+      // console.log('routeCoords', routeCoords);
       var routeLength = routeCoords.length;
-      console.log('route', route);
+      // console.log('route', route);
       var routeFeature = new ol.Feature({
         type: 'route',
         geometry: route,
@@ -577,39 +578,39 @@ function findPath(path){
 }
 
 
-function getLocation() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(showPosition);
-  }
-}
-function showPosition(position) {
-  console.log([position.coords.latitude
-    ,position.coords.longitude],'@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+// function getLocation() {
+//   if (navigator.geolocation) {
+//     navigator.geolocation.getCurrentPosition(showPosition);
+//   }
+// }
+// getLocation();
+// function showPosition(position) {
+//   // console.log([position.coords.latitude,position.coords.longitude],'@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
 
-  var myLocationPointer = new ol.Feature({
-    geometry: new ol.geom.Point(ol.proj.fromLonLat([position.coords.longitude,position.coords.latitude])),
-  });
-  // console.log(pointer,'@@@@@@@');
-  myLocationPointer.setStyle(
-    new ol.style.Style({
-      image: new ol.style.Icon({
-        color: '#BADA55',
-        crossOrigin: 'anonymous',
-        // For Internet Explorer 11
-        imgSize: [20, 20],
-        src: 'data/dot.svg',
-      }),
-    }),
-  );
-  var vectorSource = new ol.source.Vector({
-    features: [myLocationPointer],
-  });
-  var myLocationLayer = new ol.layer.Vector({
-    source: vectorSource,
-  });
+//   var myLocationPointer = new ol.Feature({
+//     geometry: new ol.geom.Point(ol.proj.fromLonLat([position.coords.longitude,position.coords.latitude])),
+//   });
+//   // console.log(pointer,'@@@@@@@');
+//   myLocationPointer.setStyle(
+//     new ol.style.Style({
+//       image: new ol.style.Icon({
+//         color: '#BADA55',
+//         crossOrigin: 'anonymous',
+//         // For Internet Explorer 11
+//         imgSize: [20, 20],
+//         src: 'data/dot.svg',
+//       }),
+//     }),
+//   );
+//   var vectorSource = new ol.source.Vector({
+//     features: [myLocationPointer],
+//   });
+//   var myLocationLayer = new ol.layer.Vector({
+//     source: vectorSource,
+//   });
 
-  map.addLayer(myLocationLayer);//layer activation
-}
+//   map.addLayer(myLocationLayer);//layer activation
+// }
 var poiData={};
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -626,7 +627,7 @@ function gitAllPoi(){
     .set('X-API-Key', 'foobar')
     .set('accept', 'json')
     .end((err, res) => {
-      console.log(res.body.getPoIByFloorResult,'gitAllPoi'); 
+      // console.log(res.body.getPoIByFloorResult,'gitAllPoi'); 
       var angleRotate = Number($('#rotate').val());
       let angle = (-270 + angleRotate)*Math.PI/180;
       let scale =0.00441176470588235;
@@ -701,7 +702,7 @@ function gitAllPoi(){
           },
         }) ];
 
-      console.log(geojsonObject);
+      // console.log(geojsonObject);
       var source = new ol.source.Vector({
         features: new ol.format.GeoJSON().readFeatures(geojsonObject),
       });
@@ -722,6 +723,245 @@ function getpath(){
   var distpoi = Number($('#to').val());
   findPath([edgeID,distpoi]);
 }
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+
+
+///////////////////////////////Out door navigation//////////////////////////////
+/**
+ * Out door navigation
+ */
+var outnavInput = document.getElementById('outnav-input'); //for search
+var secPointInput = document.getElementById('secPoint-input'); //for search
+var outnavButton = document.getElementById('outnav-button');//for search
+var outnavResult = document.getElementById('outnav-result');//for search  
+
+
+
+async function Outdoor(query,query2) {
+  resultSpan.innerHTML = 'Searching ...';
+  console.log(query);
+  
+  fetch(`https://eu1.locationiq.com/v1/search.php?key=d4328e89827d71&q=${query}&format=json`)
+    .then(function (response) {
+      // console.log('sadsadasdsadasd',response);
+      return response.json();
+    })
+    .then(function (json) {
+      var results = json[0];
+      // console.log(results);
+      var pointer = new ol.Feature({
+        geometry: new ol.geom.Point(ol.proj.fromLonLat([results.lon, results.lat])),
+      });
+      // console.log(pointer,'@@@@@@@');
+      pointer.setStyle(
+        new ol.style.Style({
+          image: new ol.style.Icon({
+            color: '#BADA55',
+            crossOrigin: 'anonymous',
+            // For Internet Explorer 11
+            imgSize: [20, 20],
+            src: 'data/dot.svg',
+          }),
+        }),
+      );
+      var vectorSource = new ol.source.Vector({
+        features: [pointer],
+      });
+      var vectorLayer = new ol.layer.Vector({
+        name:'vectorLayer5',
+        source: vectorSource,
+      });
+      map.getLayers().forEach(layer => {
+        if (layer && layer.get('name') === 'vectorLayer5') {
+          map.removeLayer(layer);
+          
+        }});
+      
+      map.addLayer(vectorLayer);//layer activation
+      // map.setView(new ol.View({
+      //   center: ol.proj.fromLonLat([results.lon,results.lat]),
+      //   zoom: 17,
+      // }));
+
+      outnavResult.innerHTML =results.display_name ;          
+
+      function getLocation() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(showPosition);
+        }
+      }
+      getLocation();
+      async function showPosition(position) {
+        // console.log([position.coords.latitude,position.coords.longitude],'@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+      
+        var myLocationPointer = new ol.Feature({
+          geometry: new ol.geom.Point(ol.proj.fromLonLat([position.coords.longitude,position.coords.latitude])),
+        });
+        // console.log(pointer,'@@@@@@@');
+        myLocationPointer.setStyle(
+          new ol.style.Style({
+            image: new ol.style.Icon({
+              color: '#BADA55',
+              crossOrigin: 'anonymous',
+              // For Internet Explorer 11
+              imgSize: [20, 20],
+              src: 'data/dot.svg',
+            }),
+          }),
+        );
+        var vectorSource = new ol.source.Vector({
+          features: [myLocationPointer],
+        });
+        var myLocationLayer = new ol.layer.Vector({
+          name: 'vectorLayer5',
+          source: vectorSource,
+        });
+        map.getLayers().forEach(layer => {
+          if (layer && layer.get('name') === 'vectorLayer5') {
+            map.removeLayer(layer);
+            
+          }});
+        map.addLayer(myLocationLayer);//layer activation
+        //http://router.project-osrm.org/route/v1/driving/35.557818,31.5833556;13.388860,52.517037?alternatives=false&annotations=nodes
+        //http://router.project-osrm.org/route/v1/driving/${position.coords.longitude},${position.coords.latitude};${results.lon},${results.lat}?alternatives=false&annotations=nodes
+        //http://router.project-osrm.org/route/v1/driving/13.388860,52.517037;13.397634,52.529407;13.428555,52.523219?overview=false
+        //http://router.project-osrm.org/route/v1/driving/${position.coords.longitude},${position.coords.latitude};${results.lon},${results.lat}?overview=false
+        async function  url(){
+          if(query2){
+            console.log('query2query2query2query2',query2);
+            const response1 = await fetch(`https://eu1.locationiq.com/v1/search.php?key=d4328e89827d71&q=${query2}&format=json`);
+            const json1 =await response1.json(); 
+            const results1 = json1[0];
+            return `http://router.project-osrm.org/route/v1/driving/${position.coords.longitude},${position.coords.latitude};${results1.lon},${results1.lat};${results.lon},${results.lat}?alternatives=true&overview=full&annotations=nodes&geometries=geojson`;
+          }else {
+            console.log('hellllllllllllllllllllllllllllllllllllllllloooooooooooooooooooooooooooooooooooooooooooooooo')
+            return `http://router.project-osrm.org/route/v1/driving/${position.coords.longitude},${position.coords.latitude};${results.lon},${results.lat}?alternatives=true&overview=full&annotations=nodes&geometries=geojson`;
+          }
+        }
+
+        // console.log('urlurlurlurlurlurlurl',await url());
+        fetch( await url())
+          .then(function (response) {
+            console.log('sadsadasdsadasd',response);
+            return response.json();
+          })
+          .then(function (json) {
+            var finalCoord=[];
+            console.log('jsonjsonjson',json);
+            console.log(json.routes[0].geometry.coordinates);
+            console.log(json.routes[0].legs[0].annotation.nodes);
+            var results = json.routes[0].geometry.coordinates; 
+            results.forEach((ele)=>{
+              finalCoord.push(ele[1],ele[0]);
+            });
+            console.log('resultsresults',finalCoord);
+
+            var polyline=ol.format.Polyline.encodeDeltas(
+              finalCoord,
+              2,1e6,
+            );
+              // console.log(results,'resultsresultsresults');
+              // console.log(polyline);
+            var route = /** @type {import("../src/ol/geom/LineString.js").default} */ (new ol.format.Polyline(
+              {
+                factor: 1e6,
+              },
+            ).readGeometry(polyline, {
+              dataProjection: 'EPSG:4326',
+              featureProjection: 'EPSG:3857',
+            }));
+      
+            //0: -5751733.504402943
+            //1: -3317367.02757665
+      
+            // coordinates.unshift(getLocation());
+            // console.log('coordinates',coordinates);
+            
+            var routeCoords = route.getCoordinates();
+            // console.log('routeCoords', routeCoords);
+            var routeLength = routeCoords.length;
+            // console.log('route', route);
+            var routeFeature = new ol.Feature({
+              type: 'route',
+              geometry: route,
+            });
+            var geoMarker = /** @type Feature<import("../src/ol/geom/Point").default> */ (new ol.Feature(
+              {
+                type: 'geoMarker',
+                geometry: new ol.geom.Point(routeCoords[0]),
+              },
+            ));
+            var startMarker = new ol.Feature({
+              type: 'icon',
+              geometry: new ol.geom.Point(routeCoords[0]),
+            });
+            var endMarker = new ol.Feature({
+              type: 'icon',
+              geometry: new ol.geom.Point(routeCoords[routeLength - 1]),
+            });
+      
+            var styles = {
+              route: new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                  width: 6,
+                  color: [237, 212, 0, 0.8],
+                }),
+              }),
+              icon: new ol.style.Style({
+                image: new ol.style.Icon({
+                  anchor: [0.5, 1],
+                  src: 'data/icon.png',
+                }),
+              }),
+              geoMarker: new ol.style.Style({
+                image: new ol.style.Circle({
+                  radius: 7,
+                  fill: new ol.style.Fill({ color: 'rgb(43, 149, 219)' }),
+                  stroke: new ol.style.Stroke({
+                    color: 'white',
+                    width: 2,
+                  }),
+                }),
+              }),
+            };
+      
+      
+            var vectorLayer4 = new ol.layer.Vector({
+              name:'vectorLayer4',
+              source: new ol.source.Vector({
+                features: [routeFeature, geoMarker, startMarker, endMarker],
+              }),
+              style: function (feature) {
+                return styles[feature.get('type')];
+              },
+            });
+            map.getLayers().forEach(layer => {
+              if (layer && layer.get('name') === 'vectorLayer4') {
+                map.removeLayer(layer);
+                
+              }});
+            map.addLayer(vectorLayer4);//layer activation
+
+          });
+
+        
+      }
+
+    });
+}
+
+
+outnavButton.onclick = function (event) {
+  Outdoor(outnavInput.value,secPointInput.value);
+  event.preventDefault();
+};
+
+
+
+ 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Add functionality to vectors (Pop up text):

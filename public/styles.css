@@ -57,3 +57,11 @@ body{
 canvas {
   transform: inherit !important;
 }
+.form-go {
+  display: flex;
+  justify-content: space-between;
+}
+.btn1{
+  width: 48%;
+  margin-top: 1%;
+}

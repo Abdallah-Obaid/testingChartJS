@@ -49,6 +49,17 @@
                 <div id = 'out-map' class="map">
                   <div id="map" class="map"></div>
                 </div>
+                <span id="outnav-result"></span>
+                <form class="form-go">
+                  <div>
+                  <label for="outnav-input">Go to:</label>
+                  <input type="text" id="outnav-input" placeholder="4326, 27700, 3031, US National Atlas, Swiss, France, ..." class="form-control" size="50" />
+                  <label for="outnav-input">Pass through:</label>
+                  <input type="text" id="secPoint-input" placeholder="4326, 27700, 3031, US National Atlas, Swiss, France, ..." class="form-control" size="50" />
+                  </div>
+                  <button id="outnav-button" class="btn1">Lets go!</button>
+                </form>
+
                 <!-- options for georeferancing -->
                 <div class="options">
                     <h2>Options:</h2>
@@ -71,11 +82,11 @@
                   <div id="form">
                   <label for="from">
                     EdgeID:&nbsp;
-                    <input id="from" type="text">
+                    <input id="from" type="text" value="38">
                   </label>
                   <label for="to">
                     DestPoIId:&nbsp;
-                    <input id="to" type="text">
+                    <input id="to" type="text" value="35">
                   </label>
                   <button id = 'submit'>Submit</button>
                   </div>
@@ -116,63 +127,7 @@
                 </div>
         </div>
     </main>
-    <script>
-    // var names = document.getElementById('names').value
-    // var attend = document.getElementById('attend').value
-    // var ctx = document.getElementById('myChart').getContext('2d');
-    //         var myChart = new Chart(ctx, {
-    //             type: 'line',
-    //             data: {
-    //                 labels: names.split(','),
-    //                 datasets: [{
-    //                     label: 'Attendance',
-    //                     data: attend.split(','),
-    //                     backgroundColor: [
-    //                         'rgba(255, 99, 132, 0.2)',
-    //                         'rgba(54, 162, 235, 0.2)',
-    //                         'rgba(255, 206, 86, 0.2)',
-    //                         'rgba(75, 192, 192, 0.2)',
-    //                         'rgba(54, 162, 235, 0.2)',
-    //                         'rgba(255, 206, 86, 0.2)',
-    //                         'rgba(54, 162, 235, 0.2)',
-    //                         'rgba(255, 206, 86, 0.2)',
-    //                         'rgba(153, 102, 255, 0.2)',
-    //                         'rgba(255, 159, 64, 0.2)'
-    //                     ],
-    //                     borderColor: [
-    //                         'rgba(255, 99, 132, 1)',
-    //                         'rgba(54, 162, 235, 1)',
-    //                         'rgba(255, 206, 86, 1)',
-    //                         'rgba(75, 192, 192, 1)',
-    //                         'rgba(54, 162, 235, 1)',
-    //                         'rgba(255, 206, 86, 1)',
-    //                         'rgba(54, 162, 235, 1)',
-    //                         'rgba(255, 206, 86, 1)',
-    //                         'rgba(153, 102, 255, 1)',
-    //                         'rgba(255, 159, 64, 1)'
-    //                     ],
-    //                     borderWidth: 1,
-    //                     hoverBorderWidth:3,
-    //                     hoverBorderColor:'#000'
-    //                 }]
-    //             },
-    //             options: {
-    //                 title:{
-    //                     display:true,
-    //                     text:'Attendace Chart',
-    //                     fontSize:25,
-    //                 },
-    //                 scales: {
-    //                     yAxes: [{
-    //                         ticks: {
-    //                             beginAtZero: true
-    //                         }
-    //                     }]
-    //                 }
-    //             }
-    //         });
-    </script>
-    <footer></footer>
+     <footer></footer>
       <!-- jQuery -->
   <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/superagent/4.1.0/superagent.min.js" integrity="sha512-LJaxxgpiq7SihGQ21nejROsll6FRrgbs0Wxtgqb5x+Q0CJICA3vt8hlBxSD8NLsO+Yabgg3B7ARexiijKiojGg==" crossorigin="anonymous"></script>
