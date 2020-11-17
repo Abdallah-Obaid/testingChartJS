@@ -455,15 +455,11 @@ async function  findPath(path,yes){
     .then((response) => response.json())
   //Then with the data from the response in JSON...
     .then((res) => {
-      console.log('Success:', res);
-      finalPathArray = finalPathArray.concat(coordinateForPath[path[0]]);
-      console.log(res,'res 1st');   
       map.getLayers().forEach(layer => {
         if (layer && layer.get('name') === 'vectorLayer3') {
           map.removeLayer(layer);
           
         }});
-      console.log(res,'resresresresresres');
       let val1 =Math.abs(coordinateForPath[res.getPathToPoIResult[1]][0][0] - coordinateForPath[path[0]][0][0]) + Math.abs(coordinateForPath[res.getPathToPoIResult[1]][0][1] - coordinateForPath[path[0]][0][1]);
       let val2 =Math.abs(coordinateForPath[res.getPathToPoIResult[1]][0][0] - coordinateForPath[path[0]][1][0]) +Math.abs(coordinateForPath[res.getPathToPoIResult[1]][0][1] - coordinateForPath[path[0]][1][1]);
       if(val1 < val2){
