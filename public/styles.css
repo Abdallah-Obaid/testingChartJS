@@ -11,7 +11,6 @@ margin: 0 auto;
 width: 50%;
 }
 
-
 .header{
   background-color: cornflowerblue;
 }
@@ -36,6 +35,9 @@ width: 50%;
   width: 50%;
 }
 
+input{
+  width: 100%;
+}
 
 .grid-container{
     display:grid;
@@ -85,11 +87,18 @@ width: 50%;
 /* canvas {
   transform: inherit !important;
 } */
+
 .form-go {
   display: flex;
   justify-content: space-between;
 }
+
 .btn1{
   width: 45%;
   margin-top: 12%;
+}
+
+.btn{
+  width: 100%;
+  /* margin-top: 12%; */
 }
