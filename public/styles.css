@@ -1,29 +1,57 @@
+*{
+  box-sizing: border-box;
+  /* width: 100%; */
+}
+
+.main{
+display: flex;
+justify-content: center;
+align-items: center;
+margin: 0 auto;
+width: 50%;
+}
+
+
+.header{
+  background-color: cornflowerblue;
+}
+
 .map {
-    height: 400px;
+    height: 70vh;
     width: 100%;
     margin-top: 30px;
     border: 2px;
     border-color: aqua;
     border-radius: 5px 5px 5px 5px;
-  }
-*{
-    box-sizing: border-box;
-}  
-
-body{
-    margin: 0;
-    padding: 0px;
 }
+
+.h1{
+  color: rgb(204, 204, 204);
+  text-align: center;
+  padding-top: 1%;
+  padding-bottom: 1%;
+}
+
+.div-50{
+  width: 50%;
+}
+
+
 .grid-container{
     display:grid;
     grid-template-columns: 20vw 80vw;
     grid-template-rows: 100vh;
 }
+
 .sidebar{
     /* margin-left: 15px; */
     width: 517px;
 }
-  
+
+.options{
+  display:none;
+}
+
 .options input[type="number"] {
     width:5em;
 }
@@ -31,7 +59,19 @@ body{
 .options input[type="range"] {
     vertical-align: middle;
 }
-  
+
+.options input[type="number"] {
+  width:5em;
+}
+
+.options input[type="range"] {
+  vertical-align: middle;
+}
+
+.options input[type="number"] {
+  margin-bottom: 1%;
+}
+
 .ol-zoom {
     top: 0.5em;
     left: 0.5em;
@@ -42,21 +82,9 @@ body{
   width: 2em;
 }
 
-/* #x {
-  display: none;
-}
-
-#y {
-  display: none;
-} */
-
-.options input[type="number"] {
-  margin-bottom: 1%;
-}
-
-canvas {
+/* canvas {
   transform: inherit !important;
-}
+} */
 .form-go {
   display: flex;
   justify-content: space-between;
@@ -64,7 +92,4 @@ canvas {
 .btn1{
   width: 45%;
   margin-top: 12%;
-}
-.options{
-  display:none;
 }

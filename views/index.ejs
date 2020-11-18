@@ -12,18 +12,16 @@
     <script type="text/javascript" src="https://openlayers.org/en/latest/build/ol.js"></script>
     <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL,Object.assign"></script>
     <link rel="stylesheet" href="../libs/v6.4.3-dist/ol-ext.css" />
-
-        <link rel="stylesheet" href="../../dist/ol-ext.css" />
-    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../../dist/ol-ext.css" />
     <link rel="stylesheet" href="../styles.css">
     <link rel="stylesheet" href="../libs/v6.4.3-dist/ol.css">
     <title>Document</title>
 </head>
 <body>
-    <header>
-        <h1>Geo-Referencing sample</h1>
+    <header class="header">
+        <h1 class="h1">Geo-Referencing sample</h1>
     </header>
-    <main>
+    <main class="main">
         <div>
             <!-- <input type='hidden' id = 'names' value='<%=names%>' >
             <input type='hidden' id = 'attend' value='<%=attend%>'> -->
@@ -51,15 +49,15 @@
                 </div>
                 <span id="outnav-result"></span>
                 <form class="form-go">
-                  <div>
+                  <div class = "div-50">
                     <h2>In-Out door bath:</h2>
-                      <label for="outnav-input">Go to:</label>
-                      <input type="text" id="outnav-input" placeholder="4326, 27700, 3031, US National Atlas, Swiss, France, ..." class="form-control" size="50" value="jad center"/>
+                      <label for="outnav-input">Gate:</label>
+                      <input type="text" id="outnav-input" placeholder="4326, 27700, 3031, US National Atlas, Swiss, France, ..." class="form-control" size="50" value="jad center" disabled/>
                       <label for="outnav-input">Pass through:</label>
                       <input type="text" id="secPoint-input" placeholder="4326, 27700, 3031, US National Atlas, Swiss, France, ..." class="form-control" size="50" value="دوار الواحة" />
-                      <label for="gate-input">Gate:</label>
-                      <input type="text" id="gate-input" placeholder="Enter the gate ID" class="form-control" size="50" value="1"/>
-                      <label for="poi-input">Point of interest:</label>
+                      <!-- <label for="gate-input">Gate:</label>
+                      <input type="text" id="gate-input" placeholder="Enter the gate ID" class="form-control" size="50" value="1"/> -->
+                      <label for="poi-input">Point of interest:(Press the POI while open console)</label>
                       <input type="text" id="poi-input" placeholder="Enter the point of interest ID" class="form-control" size="50" value="35"/>
                   </div>
                   <button id="outnav-button" class="btn1">Lets go!</button>
@@ -84,17 +82,19 @@
                     <input id ="xmax" class="option" type="number" value="5766" step="10" />
                     <input id ="ymax" class="option" type="number" value ="5580" step="10" />
                   </div>
-                  <div id="form">
+                  <div id="form" class="form-go">
+                    <div class = "div-50">
                     <h2>Indoor bath:</h2>
                   <label for="from">
-                    EdgeID:&nbsp;
+                    EdgeID: (Press on start point while open console)&nbsp;
                     <input id="from" type="text" value="38">
                   </label>
                   <label for="to">
-                    DestPoIId:&nbsp;
-                    <input id="to" type="text" value="35">
+                    DestPoIId: (Press the POI while open console)&nbsp;
+                    <input id="to" type="text"  value="35">
                   </label>
-                  <button id = 'submit'>Submit</button>
+                </div>
+                  <button id = 'submit' class="btn1">Submit</button>
                   </div>
                   <!-- <label for="speed">
                     speed:&nbsp;
@@ -102,7 +102,8 @@
                   </label>
                   <button id="start-animation">Start Animation</button> -->
                 <form class="form-inline">
-                  <label for="epsg-query">Search projection:</label>
+                  <h2>Search projection:</h2>
+                  <!-- <label for="epsg-query">Search projection:</label>ة -->
                   <input type="text" id="epsg-query" placeholder="4326, 27700, 3031, US National Atlas, Swiss, France, ..." class="form-control" size="50" />
                   <button id="epsg-search" class="btn">Search</button>
                   <span id="epsg-result"></span>

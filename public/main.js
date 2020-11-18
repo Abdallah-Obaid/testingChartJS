@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 'use strict';
-console.log('hi');
+console.log('Hi');
 
 
 var gate={
@@ -46,10 +46,10 @@ var meters2degress = function(x,y) {
 };
 
 map.on('click',function(e){
-  console.log(e.coordinate,'Mercator');
-  console.log(meters2degress(e.coordinate[0],e.coordinate[1]),'LON|LAT');
+  console.log('Coordinate in Mercator: ',e.coordinate);
+  console.log('Coordinate in LON|LAT',meters2degress(e.coordinate[0],e.coordinate[1]));
   map.forEachFeatureAtPixel(e.pixel,function(feature,layer){
-    console.log('feature',feature);
+    console.log('Feature: just take the number for ID',feature.getProperties());
     if(feature.values_.name.split(' ')[0] != 'poi'){
       $('#from').val(feature.values_.name.split(' ')[1]); 
     }else{
@@ -385,7 +385,7 @@ function printPoints(){
           // }
         }
       });   
-      console.log(coordinateForPath,'coordinateForPath');
+      // console.log(coordinateForPath,'coordinateForPath');
     });
 }
 let checkExistentArray=[];
@@ -759,7 +759,7 @@ var edgeID = Number($('#from').val()); //for search
 var outnavButton = document.getElementById('outnav-button');//for search
 var outnavResult = document.getElementById('outnav-result');//for search  
 
-console.log('poiInputpoiInputpoiInput',poiInput);
+// console.log('poiInputpoiInputpoiInput',poiInput);
 
 async function Outdoor(query,query2) {
   resultSpan.innerHTML = 'Searching ...';
