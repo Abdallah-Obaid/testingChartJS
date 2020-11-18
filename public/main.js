@@ -753,12 +753,13 @@ function getpath(){
  */
 var outnavInput = document.getElementById('outnav-input'); //for search
 var secPointInput = document.getElementById('secPoint-input'); //for search
-var poiInput = document.getElementById('poi-input').value; //for search
-var edgeID = Number($('#from').val());
+var poiInput = Number($('#poi-input').val()); //for search
+
+var edgeID = Number($('#from').val()); //for search
 var outnavButton = document.getElementById('outnav-button');//for search
 var outnavResult = document.getElementById('outnav-result');//for search  
 
-
+console.log('poiInputpoiInputpoiInput',poiInput);
 
 async function Outdoor(query,query2) {
   resultSpan.innerHTML = 'Searching ...';
@@ -976,7 +977,12 @@ async function Outdoor(query,query2) {
 
 
 outnavButton.onclick = function (event) {
+  outnavInput = document.getElementById('outnav-input'); //for search
+  secPointInput = document.getElementById('secPoint-input'); //for search
+  poiInput = Number($('#poi-input').val()); //for search
+  edgeID = Number($('#from').val()); //for search
   Outdoor(outnavInput.value,secPointInput.value);
+
   event.preventDefault();
 };
 
