@@ -846,7 +846,7 @@ async function Outdoor(query,query2) {
             
           }});
         map.addLayer(myLocationLayer);//layer activation
-        //http://router.project-osrm.org/route/v1/driving/35.557818,31.5833556;13.388860,52.517037?alternatives=false&annotations=nodes
+        //https://router.project-osrm.org/route/v1/driving/35.557818,31.5833556;13.388860,52.517037?alternatives=false&annotations=nodes
         //http://router.project-osrm.org/route/v1/driving/${position.coords.longitude},${position.coords.latitude};${results.lon},${results.lat}?alternatives=false&annotations=nodes
         //http://router.project-osrm.org/route/v1/driving/13.388860,52.517037;13.397634,52.529407;13.428555,52.523219?overview=false
         //http://router.project-osrm.org/route/v1/driving/${position.coords.longitude},${position.coords.latitude};${results.lon},${results.lat}?overview=false
@@ -856,10 +856,10 @@ async function Outdoor(query,query2) {
             const response1 = await fetch(`https://eu1.locationiq.com/v1/search.php?key=d4328e89827d71&q=${query2}&format=json`);
             const json1 =await response1.json(); 
             const results1 = json1[0];
-            return `http://router.project-osrm.org/route/v1/driving/${position.coords.longitude},${position.coords.latitude};${results1.lon},${results1.lat};${results.lon},${results.lat}?alternatives=true&overview=full&annotations=nodes&geometries=geojson`;
+            return `https://router.project-osrm.org/route/v1/driving/${position.coords.longitude},${position.coords.latitude};${results1.lon},${results1.lat};${results.lon},${results.lat}?alternatives=true&overview=full&annotations=nodes&geometries=geojson`;
           }else {
             console.log('hellllllllllllllllllllllllllllllllllllllllloooooooooooooooooooooooooooooooooooooooooooooooo');
-            return `http://router.project-osrm.org/route/v1/driving/${position.coords.longitude},${position.coords.latitude};${results.lon},${results.lat}?alternatives=true&overview=full&annotations=nodes&geometries=geojson`;
+            return `https://router.project-osrm.org/route/v1/driving/${position.coords.longitude},${position.coords.latitude};${results.lon},${results.lat}?alternatives=true&overview=full&annotations=nodes&geometries=geojson`;
           }
         }
 
