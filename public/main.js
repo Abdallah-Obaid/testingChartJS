@@ -66,7 +66,7 @@ map.on('click',function(e){
 const openStreetMapStandard = new ol.layer.Tile({
   source: new ol.source.OSM(),
   visible:true,
-  title: 'Standard-Layers',
+  title: 'openStreetMapStandard',
 });
 
 const openStreetMapHumanitarian = new ol.layer.Tile({
@@ -74,15 +74,15 @@ const openStreetMapHumanitarian = new ol.layer.Tile({
     url:'https://{a-c}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
   }),
   visible:false,
-  title: 'First-Layer',
+  title: 'openStreetMapHumanitarian',
 });
 const stamenTerrain = new ol.layer.Tile({
   source: new ol.source.XYZ({
-    url:'http://tile.stamen.com/watercolor/{z}/{x}/{y}.jpg',
-    attributions: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.',
+    url:'http://tile.stamen.com/terrain/{z}/{x}/{y}.jpg',
+    attributions: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.',
   }),
   visible:false,
-  title: 'Sec-Layer',
+  title: 'stamenTerrain',
 });
 const sateliteTerrain = new ol.layer.Tile({
   source: new ol.source.XYZ({
